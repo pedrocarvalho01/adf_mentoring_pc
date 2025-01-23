@@ -1,0 +1,23 @@
+{
+	"name": "DS_ABLB_MOVIES_SOURCE",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ABLB_MOVIES",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "movies"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

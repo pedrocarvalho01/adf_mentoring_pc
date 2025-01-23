@@ -1,0 +1,70 @@
+{
+	"name": "07_00_COPY_JSON_1000_DIU_PARALEL_TEST",
+	"properties": {
+		"activities": [
+			{
+				"name": "COPY_INCREMENTAL_LOAD",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": false,
+							"wildcardFileName": "*.json",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "PreserveHierarchy"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"parallelCopies": 32,
+					"dataIntegrationUnits": 4
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_BLOB_ONLINE_JSON",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_LAKE_ONLINE_JSON",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"variables": {
+			"RefDateTime": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Module 07"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-12-23T12:31:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

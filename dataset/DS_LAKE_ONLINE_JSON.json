@@ -1,0 +1,20 @@
+{
+	"name": "DS_LAKE_ONLINE_JSON",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_LAKE",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "online",
+				"fileSystem": "raw"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

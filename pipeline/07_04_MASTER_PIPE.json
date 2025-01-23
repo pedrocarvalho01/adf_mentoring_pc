@@ -1,0 +1,75 @@
+{
+	"name": "07_04_MASTER_PIPE",
+	"properties": {
+		"activities": [
+			{
+				"name": "PIPE_07_01",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "07_01_INCREMENTAL_LOAD",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "PIPE_07_02",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "PIPE_07_01",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "07_02_FROM_LAKE_TO_SQL_STG",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "PIPE_07_03",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "PIPE_07_02",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "07_03_DATALAKE_ARCHIVE_JSON",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Module 07"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-12-23T14:47:59Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

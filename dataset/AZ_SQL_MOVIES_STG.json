@@ -1,0 +1,31 @@
+{
+	"name": "AZ_SQL_MOVIES_STG",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"paramSchema": {
+				"type": "string"
+			},
+			"paramTable": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().paramSchema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().paramTable",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

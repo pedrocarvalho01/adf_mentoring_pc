@@ -1,0 +1,106 @@
+{
+	"name": "11_02_SENDEMAIL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://prod-28.francecentral.logic.azure.com:443/workflows/c0471599f4764dfcba94c5d0516ad206/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=DSpJ78mvbqqkAQ8m9KI8kDa6_9TdpBbE1ZbO-hNRric",
+					"body": {
+						"message": "Pedro Test - This is a custom dynamic message from your pipeline with run ID @{pipeline().RunId}.",
+						"dataFactoryName": "@{pipeline().DataFactory}",
+						"pipelineName": "@{pipeline().Pipeline}",
+						"receiver": "@{pipeline().parameters.receiver}"
+					}
+				}
+			},
+			{
+				"name": "Web1_secret",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": {
+						"value": "@pipeline().globalParameters.URISECRET_HTTP_TRIGGER_LOGICAPP",
+						"type": "Expression"
+					},
+					"body": {
+						"message": "Pedro Test - This is a custom dynamic message from your pipeline with run ID @{pipeline().RunId}.",
+						"dataFactoryName": "@{pipeline().DataFactory}",
+						"pipelineName": "@{pipeline().Pipeline}",
+						"receiver": "@{pipeline().parameters.receiver}"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			},
+			{
+				"name": "Set_Var_httppost",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Web1_secret",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "httpPostURL",
+					"value": {
+						"value": "@activity('Web1_secret').output.value",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"receiver": {
+				"type": "string",
+				"defaultValue": "pedro_carvalho1@epam.com"
+			}
+		},
+		"variables": {
+			"httpPostURL": {
+				"type": "String"
+			},
+			"pipeline_status": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Module 011"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-01-22T17:14:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

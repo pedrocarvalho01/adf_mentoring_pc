@@ -1,0 +1,64 @@
+{
+	"name": "AZ_SQL_ETL_CONTROLMETA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ControlId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SourcePath",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FileName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ColumnDelimiter",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Encoding",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EscapeCharacter",
+				"type": "nvarchar"
+			},
+			{
+				"name": "QuoteCharacter",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DestinationSchema",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DestinationTable",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DIU",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ColumnMapping",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "etl",
+			"table": "tControlMetadata"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

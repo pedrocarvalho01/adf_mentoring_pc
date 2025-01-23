@@ -1,0 +1,50 @@
+{
+	"name": "MASTER_MOVIES",
+	"properties": {
+		"description": "COPY MOVIES FROM BLOB TO LAKE THEN TO SQL THEN ARCHIVE THEN DELETE",
+		"activities": [
+			{
+				"name": "BLOB TO ADSL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FROM_BLOB_TO_ADSL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "ADSL TO SQL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "BLOB TO ADSL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FROM_BLOB_TO_SQL_STG",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-11-25T11:37:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

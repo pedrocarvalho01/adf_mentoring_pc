@@ -1,0 +1,23 @@
+{
+	"name": "010_01_FAILPIPELINE",
+	"properties": {
+		"activities": [
+			{
+				"name": "Fail1",
+				"type": "Fail",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"message": "FAIL FOR METRICS",
+					"errorCode": "500"
+				}
+			}
+		],
+		"folder": {
+			"name": "Module 010"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-01-20T15:30:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

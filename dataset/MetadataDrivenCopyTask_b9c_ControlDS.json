@@ -1,0 +1,20 @@
+{
+	"name": "MetadataDrivenCopyTask_b9c_ControlDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "MetadataDrivenCopyTask_b9c_20250109"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "MainControlTable_b9c"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

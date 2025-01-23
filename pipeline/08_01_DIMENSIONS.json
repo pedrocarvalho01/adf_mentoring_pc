@@ -1,0 +1,74 @@
+{
+	"name": "08_01_DIMENSIONS",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIMENSIONS",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DIM_MOVIE_ONLINESERVICE",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "Azure-IR-M8",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "None",
+					"cacheSinks": {
+						"firstRowOnly": true
+					}
+				}
+			},
+			{
+				"name": "FACTS",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "DIMENSIONS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DIM_FACTS",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "Azure-IR-M8",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "None",
+					"cacheSinks": {
+						"firstRowOnly": true
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Module 08"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-01-07T15:51:49Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

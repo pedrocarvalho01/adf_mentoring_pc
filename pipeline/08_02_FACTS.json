@@ -1,0 +1,37 @@
+{
+	"name": "08_02_FACTS",
+	"properties": {
+		"activities": [
+			{
+				"name": "FACTS",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DIM_FACTS",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "Azure-IR-M8",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Module 08"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-01-07T15:03:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,141 @@
+{
+	"name": "07_01_INCREMENTAL_LOAD",
+	"properties": {
+		"activities": [
+			{
+				"name": "COPY_INCREMENTAL_LOAD",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "LookupLastRunDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": false,
+							"modifiedDatetimeStart": {
+								"value": "@activity('LookupLastRunDate').output.firstRow.LastModifiedDate",
+								"type": "Expression"
+							},
+							"modifiedDatetimeEnd": {
+								"value": "@utcNow()",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.json",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "PreserveHierarchy"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_BLOB_ONLINE_JSON",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_LAKE_ONLINE_JSON",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "LookupLastRunDate",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT LastModifiedDate FROM WatermarkTable WHERE PipelineName = 'INCREMENTAL_LOAD'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_AZURESQL_WATERMARK",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Stored procedure1",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "COPY_INCREMENTAL_LOAD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[UpdateWatermark]",
+					"storedProcedureParameters": {
+						"PipelineName": {
+							"value": "INCREMENTAL_LOAD",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"variables": {
+			"RefDateTime": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Module 07"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-12-23T12:30:30Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

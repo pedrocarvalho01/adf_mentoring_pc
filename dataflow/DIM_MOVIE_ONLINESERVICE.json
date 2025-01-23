@@ -1,0 +1,169 @@
+{
+	"name": "DIM_MOVIE_ONLINESERVICE",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "movies_dbo_tMovies",
+						"type": "DatasetReference"
+					},
+					"name": "tMovies"
+				},
+				{
+					"dataset": {
+						"referenceName": "movies_dbo_tMovieStatus",
+						"type": "DatasetReference"
+					},
+					"name": "tMovieStatus"
+				},
+				{
+					"dataset": {
+						"referenceName": "movies_dbo_tOnlineService",
+						"type": "DatasetReference"
+					},
+					"name": "tOnlineService"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "datamart_dbo_dimMovie",
+						"type": "DatasetReference"
+					},
+					"name": "dimMovies"
+				},
+				{
+					"dataset": {
+						"referenceName": "datamart_dbo_DimOnlineservice",
+						"type": "DatasetReference"
+					},
+					"name": "dimOnlineService"
+				}
+			],
+			"transformations": [
+				{
+					"name": "jointMovieStatus"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "addDateFields"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "addDateFields2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          MovieId as integer,",
+				"          MovieIdNK as integer,",
+				"          Budget as integer,",
+				"          HomepagePath as string,",
+				"          Title as string,",
+				"          OriginalTitle as string,",
+				"          ReleaseDate as date,",
+				"          Revenue as long,",
+				"          Runtime as integer,",
+				"          MovieStatusId as integer,",
+				"          AvgVote as decimal(3,1),",
+				"          CreatedDate as timestamp,",
+				"          ModifiedDate as timestamp,",
+				"          SrcFileName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> tMovies",
+				"source(output(",
+				"          MovieStatusId as integer,",
+				"          MovieStatusName as string,",
+				"          CreatedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> tMovieStatus",
+				"source(output(",
+				"          ServiceId as integer,",
+				"          ServiceCode as string,",
+				"          ServiceName as string,",
+				"          CreatedDate as timestamp,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> tOnlineService",
+				"tMovies, tMovieStatus join(tMovies@MovieStatusId == tMovieStatus@MovieStatusId,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> jointMovieStatus",
+				"jointMovieStatus select(mapColumn(",
+				"          MovieIdNK,",
+				"          Title,",
+				"          ReleaseDate,",
+				"          Runtime,",
+				"          MovieStatus = MovieStatusName",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(CreatedDate = currentTimestamp(),",
+				"          ModifiedDate = currentTimestamp()) ~> addDateFields",
+				"tOnlineService select(mapColumn(",
+				"          ServiceCode,",
+				"          ServiceName",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 derive(CreatedDate = currentTimestamp(),",
+				"          ModifiedDate = currentTimestamp()) ~> addDateFields2",
+				"addDateFields sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          MovieKey as integer,",
+				"          MovieIdNK as integer,",
+				"          Title as string,",
+				"          ReleaseDate as date,",
+				"          Runtime as integer,",
+				"          MovieStatus as string,",
+				"          CreatedDate as timestamp,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> dimMovies",
+				"addDateFields2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ServiceKey as integer,",
+				"          ServiceCode as string,",
+				"          ServiceName as string,",
+				"          CreatedDate as timestamp,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> dimOnlineService"
+			]
+		}
+	}
+}

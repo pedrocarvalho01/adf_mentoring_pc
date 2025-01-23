@@ -1,0 +1,118 @@
+{
+	"name": "11_03_ENHANCE_SENDEMAIL",
+	"properties": {
+		"activities": [
+			{
+				"name": "WEB_GETKEY",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": {
+						"value": "@pipeline().globalParameters.URISECRET_HTTP_TRIGGER_LOGICAPP",
+						"type": "Expression"
+					},
+					"body": {
+						"message": "Pedro Test 2 - This is a custom dynamic message from your pipeline with run ID @{pipeline().RunId}.",
+						"dataFactoryName": "@{pipeline().DataFactory}",
+						"pipelineName": "@{pipeline().Pipeline}",
+						"receiver": "@{pipeline().parameters.receiver}"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			},
+			{
+				"name": "WEB_HTTPPOST",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "WEB_GETKEY",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": {
+						"value": "@activity('WEB_GETKEY').output.value",
+						"type": "Expression"
+					},
+					"body": {
+						"value": "{\"message\":\"Pedro Test 2 - This is a custom dynamic message from your pipeline with run ID @{pipeline().RunId}.\",\"dataFactoryName\":\"@{pipeline().DataFactory}\",\"pipelineName\":\"@{pipeline().Pipeline}\",\"receiver\":\"@{pipeline().parameters.receiver}\",\"pipestatus\":\"@{variables('pipeline_status')}\"}\n\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "WEB_GETKEY",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "pipeline_status",
+					"value": {
+						"value": "@activity('WEB_GETKEY').Status",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"receiver": {
+				"type": "string",
+				"defaultValue": "pedro_carvalho1@epam.com"
+			}
+		},
+		"variables": {
+			"httpPostURL": {
+				"type": "String"
+			},
+			"pipeline_status": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Module 011"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-01-22T17:44:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,17 @@
+{
+	"name": "mentoring-adf-pc",
+	"properties": {
+		"globalParameters": {
+			"URISECRET_HTTP_TRIGGER_LOGICAPP": {
+				"type": "string",
+				"value": "https://mentoring-key-vault-pc.vault.azure.net/secrets/HTTPPOSTURL/54afed9635b045ffb85ccc315f2ef15e?api-version=7.0"
+			}
+		}
+	},
+	"location": "francecentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "5372ba51-64b9-4f1c-8757-f227f6089b21",
+		"tenantId": "b41b72d0-4e9f-4c26-8a69-f949f367c91d"
+	}
+}

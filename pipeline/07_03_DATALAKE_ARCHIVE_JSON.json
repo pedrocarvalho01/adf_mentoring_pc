@@ -1,0 +1,97 @@
+{
+	"name": "07_03_DATALAKE_ARCHIVE_JSON",
+	"properties": {
+		"activities": [
+			{
+				"name": "COPY_FROM_LAKE_TO_ARCHIVE",
+				"description": "COPY FROM LAKE RAW/ONLINE TO RAW/ONLINE/ARCHIVE",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": false,
+							"wildcardFolderPath": "online",
+							"wildcardFileName": "*.json",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_LAKE_ONLINE_JSON",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_LAKE_RAW_ONLINE_ARCHIVE_JSON",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DELETE_FROM_RAW_ONLINE",
+				"description": "DELETE FROM RAW/ONLINE, SO FILES WILL BE STORED ON RAW/ONLINE/ARCHIVE",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "COPY_FROM_LAKE_TO_ARCHIVE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_LAKE_ONLINE_JSON",
+						"type": "DatasetReference"
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": false,
+						"enablePartitionDiscovery": false
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Module 07"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-12-24T11:28:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,70 @@
+{
+	"name": "FROM_BLOB_FRANCE_TO_LAKE_AUS",
+	"properties": {
+		"description": "COPYING DATA FROM AUS BLOB STORAGE TO DATA LAKE IN FRANCE CENTRAL",
+		"activities": [
+			{
+				"name": "COPY_CSV_TO_LAKE",
+				"description": "COPYING CSV FILE DATA FROM AUS BLOB STORAGE TO DATA LAKE IN FRANCE CENTRAL",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "CSV_BLOB_STORAGE_AUS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_ADLS_LAKE_DESTINATION_RATINGS",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-11-11T15:32:27Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

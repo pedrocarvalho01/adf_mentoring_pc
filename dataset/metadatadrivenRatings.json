@@ -1,0 +1,24 @@
+{
+	"name": "metadatadrivenRatings",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_LAKE",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "metadata-driven",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": "|",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\\"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

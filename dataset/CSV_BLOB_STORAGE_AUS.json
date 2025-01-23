@@ -1,0 +1,41 @@
+{
+	"name": "CSV_BLOB_STORAGE_AUS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BLOB_STORAGE_AUS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "ratings.csv",
+				"container": "ratings"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "userId",
+				"type": "String"
+			},
+			{
+				"name": "movieId",
+				"type": "String"
+			},
+			{
+				"name": "rating",
+				"type": "String"
+			},
+			{
+				"name": "timestamp",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
