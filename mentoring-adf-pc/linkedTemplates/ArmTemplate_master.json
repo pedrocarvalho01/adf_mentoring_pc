@@ -1,0 +1,242 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "mentoring-adf-pc"
+		},
+		"AZURE_BLOB_ONLINE_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AZURE_BLOB_ONLINE'"
+		},
+		"AzureSQLDATAMART_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSQLDATAMART'"
+		},
+		"AzureSqlDatabaseLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabaseLinkedService'"
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
+		},
+		"BLOB_STORAGE_AUS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'BLOB_STORAGE_AUS'"
+		},
+		"LS_AZUREBLOB_ONLINE_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_AZUREBLOB_ONLINE'"
+		},
+		"LS_AZURE_BLOB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_AZURE_BLOB'"
+		},
+		"SelfHostedSQLServerTickets_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SelfHostedSQLServerTickets'"
+		},
+		"AzureSQLDATAMART_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "azure-mentoring-pc.database.windows.net"
+		},
+		"AzureSQLDATAMART_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "DataMart"
+		},
+		"AzureSQLDATAMART_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminpc"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "azure-mentoring-pc.database.windows.net"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "movies"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminpc"
+		},
+		"LS_ABLB_MOVIES_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'LS_ABLB_MOVIES'"
+		},
+		"LS_ADLS_LAKE_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azurementoringdatalakepc.dfs.core.windows.net/"
+		},
+		"LS_AZUREKEYVAULT_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://mentoring-key-vault-pc.vault.azure.net/"
+		},
+		"SelfHostedSQLServerTickets_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "EPESMALW03E6"
+		},
+		"SelfHostedSQLServerTickets_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "CinemaTickets"
+		},
+		"SelfHostedSQLServerTickets_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sa"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "mentoring-adf-pc_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AZURE_BLOB_ONLINE_connectionString": {
+						"value": "[parameters('AZURE_BLOB_ONLINE_connectionString')]"
+					},
+					"AzureSQLDATAMART_password": {
+						"value": "[parameters('AzureSQLDATAMART_password')]"
+					},
+					"AzureSqlDatabaseLinkedService_password": {
+						"value": "[parameters('AzureSqlDatabaseLinkedService_password')]"
+					},
+					"AzureStorageLinkedService_connectionString": {
+						"value": "[parameters('AzureStorageLinkedService_connectionString')]"
+					},
+					"BLOB_STORAGE_AUS_connectionString": {
+						"value": "[parameters('BLOB_STORAGE_AUS_connectionString')]"
+					},
+					"LS_AZUREBLOB_ONLINE_connectionString": {
+						"value": "[parameters('LS_AZUREBLOB_ONLINE_connectionString')]"
+					},
+					"LS_AZURE_BLOB_connectionString": {
+						"value": "[parameters('LS_AZURE_BLOB_connectionString')]"
+					},
+					"AzureSQLDATAMART_properties_typeProperties_server": {
+						"value": "[parameters('AzureSQLDATAMART_properties_typeProperties_server')]"
+					},
+					"AzureSQLDATAMART_properties_typeProperties_database": {
+						"value": "[parameters('AzureSQLDATAMART_properties_typeProperties_database')]"
+					},
+					"AzureSQLDATAMART_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSQLDATAMART_properties_typeProperties_userName')]"
+					},
+					"AzureSqlDatabaseLinkedService_properties_typeProperties_server": {
+						"value": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_server')]"
+					},
+					"AzureSqlDatabaseLinkedService_properties_typeProperties_database": {
+						"value": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_database')]"
+					},
+					"AzureSqlDatabaseLinkedService_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_userName')]"
+					},
+					"LS_ABLB_MOVIES_sasUri": {
+						"value": "[parameters('LS_ABLB_MOVIES_sasUri')]"
+					},
+					"LS_ADLS_LAKE_properties_typeProperties_url": {
+						"value": "[parameters('LS_ADLS_LAKE_properties_typeProperties_url')]"
+					},
+					"LS_AZUREKEYVAULT_properties_typeProperties_baseUrl": {
+						"value": "[parameters('LS_AZUREKEYVAULT_properties_typeProperties_baseUrl')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "mentoring-adf-pc_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'mentoring-adf-pc_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "mentoring-adf-pc_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"SelfHostedSQLServerTickets_password": {
+						"value": "[parameters('SelfHostedSQLServerTickets_password')]"
+					},
+					"SelfHostedSQLServerTickets_properties_typeProperties_server": {
+						"value": "[parameters('SelfHostedSQLServerTickets_properties_typeProperties_server')]"
+					},
+					"SelfHostedSQLServerTickets_properties_typeProperties_database": {
+						"value": "[parameters('SelfHostedSQLServerTickets_properties_typeProperties_database')]"
+					},
+					"SelfHostedSQLServerTickets_properties_typeProperties_userName": {
+						"value": "[parameters('SelfHostedSQLServerTickets_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'mentoring-adf-pc_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "mentoring-adf-pc_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'mentoring-adf-pc_ArmTemplate_2')]"
+			]
+		}
+	]
+}

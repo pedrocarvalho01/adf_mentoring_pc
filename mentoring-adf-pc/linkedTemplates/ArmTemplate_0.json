@@ -1,0 +1,715 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "mentoring-adf-pc"
+		},
+		"AZURE_BLOB_ONLINE_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AZURE_BLOB_ONLINE'"
+		},
+		"AzureSQLDATAMART_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSQLDATAMART'"
+		},
+		"AzureSqlDatabaseLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabaseLinkedService'"
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
+		},
+		"BLOB_STORAGE_AUS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'BLOB_STORAGE_AUS'"
+		},
+		"LS_AZUREBLOB_ONLINE_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_AZUREBLOB_ONLINE'"
+		},
+		"LS_AZURE_BLOB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_AZURE_BLOB'"
+		},
+		"AzureSQLDATAMART_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "azure-mentoring-pc.database.windows.net"
+		},
+		"AzureSQLDATAMART_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "DataMart"
+		},
+		"AzureSQLDATAMART_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminpc"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "azure-mentoring-pc.database.windows.net"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "movies"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminpc"
+		},
+		"LS_ABLB_MOVIES_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'LS_ABLB_MOVIES'"
+		},
+		"LS_ADLS_LAKE_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azurementoringdatalakepc.dfs.core.windows.net/"
+		},
+		"LS_AZUREKEYVAULT_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://mentoring-key-vault-pc.vault.azure.net/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/010_01_FAILPIPELINE')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Fail1",
+						"type": "Fail",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"message": "FAIL FOR METRICS",
+							"errorCode": "500"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Module 010"
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-01-20T15:30:57Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/11_00_testing_workflow')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Web1",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "POST",
+							"headers": {},
+							"url": "https://logicappnameadftutorialpc.azurewebsites.net:443/api/SendEmailFromPipeline/triggers/When_a_HTTP_request_is_received/invoke?api-version=2022-05-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=gFt0HQTGNxo-07_YEscKFh8CyHmBPbMvB6WHemfEbGM",
+							"body": {
+								"message": "This is a custom dynamic message from your pipeline with run ID @{pipeline().RunId}.",
+								"dataFactoryName": "@{pipeline().DataFactory}",
+								"pipelineName": "@{pipeline().Pipeline}",
+								"receiver": "@{pipeline().parameters.receiver}"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"receiver": {
+						"type": "string",
+						"defaultValue": "pedro_carvalho1@epam.com"
+					}
+				},
+				"folder": {
+					"name": "Module 011"
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-01-21T12:36:33Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/11_02_SENDEMAIL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Web1",
+						"type": "WebActivity",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "POST",
+							"headers": {},
+							"url": "https://prod-28.francecentral.logic.azure.com:443/workflows/c0471599f4764dfcba94c5d0516ad206/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=DSpJ78mvbqqkAQ8m9KI8kDa6_9TdpBbE1ZbO-hNRric",
+							"body": {
+								"message": "Pedro Test - This is a custom dynamic message from your pipeline with run ID @{pipeline().RunId}.",
+								"dataFactoryName": "@{pipeline().DataFactory}",
+								"pipelineName": "@{pipeline().Pipeline}",
+								"receiver": "@{pipeline().parameters.receiver}"
+							}
+						}
+					},
+					{
+						"name": "Web1_secret",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "GET",
+							"headers": {},
+							"url": {
+								"value": "@pipeline().globalParameters.URISECRET_HTTP_TRIGGER_LOGICAPP",
+								"type": "Expression"
+							},
+							"body": {
+								"message": "Pedro Test - This is a custom dynamic message from your pipeline with run ID @{pipeline().RunId}.",
+								"dataFactoryName": "@{pipeline().DataFactory}",
+								"pipelineName": "@{pipeline().Pipeline}",
+								"receiver": "@{pipeline().parameters.receiver}"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://vault.azure.net"
+							}
+						}
+					},
+					{
+						"name": "Set_Var_httppost",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Web1_secret",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "httpPostURL",
+							"value": {
+								"value": "@activity('Web1_secret').output.value",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"receiver": {
+						"type": "string",
+						"defaultValue": "pedro_carvalho1@epam.com"
+					}
+				},
+				"variables": {
+					"httpPostURL": {
+						"type": "String"
+					},
+					"pipeline_status": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Module 011"
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-01-22T17:14:00Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/11_03_ENHANCE_SENDEMAIL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "WEB_GETKEY",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "GET",
+							"headers": {},
+							"url": {
+								"value": "@pipeline().globalParameters.URISECRET_HTTP_TRIGGER_LOGICAPP",
+								"type": "Expression"
+							},
+							"body": {
+								"message": "Pedro Test 2 - This is a custom dynamic message from your pipeline with run ID @{pipeline().RunId}.",
+								"dataFactoryName": "@{pipeline().DataFactory}",
+								"pipelineName": "@{pipeline().Pipeline}",
+								"receiver": "@{pipeline().parameters.receiver}"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://vault.azure.net"
+							}
+						}
+					},
+					{
+						"name": "WEB_HTTPPOST",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "WEB_GETKEY",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "POST",
+							"headers": {},
+							"url": {
+								"value": "@activity('WEB_GETKEY').output.value",
+								"type": "Expression"
+							},
+							"body": {
+								"value": "{\"message\":\"Pedro Test 2 - This is a custom dynamic message from your pipeline with run ID @{pipeline().RunId}.\",\"dataFactoryName\":\"@{pipeline().DataFactory}\",\"pipelineName\":\"@{pipeline().Pipeline}\",\"receiver\":\"@{pipeline().parameters.receiver}\",\"pipestatus\":\"@{variables('pipeline_status')}\"}\n\n",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "WEB_GETKEY",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "pipeline_status",
+							"value": {
+								"value": "@activity('WEB_GETKEY').Status",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"receiver": {
+						"type": "string",
+						"defaultValue": "pedro_carvalho1@epam.com"
+					}
+				},
+				"variables": {
+					"httpPostURL": {
+						"type": "String"
+					},
+					"pipeline_status": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Module 011"
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-01-22T17:44:02Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/12_01_NEWPIPE')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 2
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Module 012"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AZURE_BLOB_ONLINE')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AZURE_BLOB_ONLINE_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSQLDATAMART')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSQLDATAMART_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSQLDATAMART_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSQLDATAMART_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSQLDATAMART_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabaseLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "AzureSqlDatabaseLinkedService desc",
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSqlDatabaseLinkedService_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSqlDatabaseLinkedService_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureStorageLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "AzureStorageLinkedService desc",
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureStorageLinkedService_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BLOB_STORAGE_AUS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('BLOB_STORAGE_AUS_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ABLB_MOVIES')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"sasUri": "[parameters('LS_ABLB_MOVIES_sasUri')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ADLS_LAKE')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_ADLS_LAKE_properties_typeProperties_url')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_AZUREBLOB_ONLINE')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "BLOB STORAGE FOR ONLINE CONTAINER FOLDER",
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_AZUREBLOB_ONLINE_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_AZUREKEYVAULT')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('LS_AZUREKEYVAULT_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_AZURE_BLOB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_AZURE_BLOB_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Azure-IR-M8')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "France Central",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 5,
+							"cleanup": false,
+							"customProperties": []
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureEastAustraliaIR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"description": "Create new Azure Integration Runtime AzureEastAustraliaIR in Australia East region. Go to the Data flow runtime tab, check out the settings. Leave the default values here",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "Australia East",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 10,
+							"cleanup": false,
+							"customProperties": []
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IntegrationRuntimeSelfHosted')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AZURE_BLOB_LAKE')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"colDelim": {
+						"type": "string",
+						"defaultValue": ","
+					},
+					"escapeChar": {
+						"type": "string",
+						"defaultValue": "\""
+					},
+					"quoteChar": {
+						"type": "string",
+						"defaultValue": "\""
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					},
+					"columnDelimiter": {
+						"value": "@dataset().colDelim",
+						"type": "Expression"
+					},
+					"escapeChar": {
+						"value": "@dataset().escapeChar",
+						"type": "Expression"
+					},
+					"firstRowAsHeader": true,
+					"quoteChar": {
+						"value": "@dataset().quoteChar",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_LAKE')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AZURE_SQL_SINK_STG_CREDITS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "cast",
+						"type": "nvarchar"
+					},
+					{
+						"name": "crew",
+						"type": "nvarchar"
+					},
+					{
+						"name": "id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "pipelineId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "source_filename",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "stg",
+					"table": "credits"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseLinkedService')]"
+			]
+		}
+	]
+}

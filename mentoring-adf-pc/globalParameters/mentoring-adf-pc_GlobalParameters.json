@@ -1,0 +1,6 @@
+{
+	"URISECRET_HTTP_TRIGGER_LOGICAPP": {
+		"type": "string",
+		"value": "https://mentoring-key-vault-pc.vault.azure.net/secrets/HTTPPOSTURL/54afed9635b045ffb85ccc315f2ef15e?api-version=7.0"
+	}
+}

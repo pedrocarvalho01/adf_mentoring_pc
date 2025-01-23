@@ -1,0 +1,69 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "mentoring-adf-pc"
+		},
+		"AZURE_BLOB_ONLINE_connectionString": {
+			"value": ""
+		},
+		"AzureSQLDATAMART_password": {
+			"value": ""
+		},
+		"AzureSqlDatabaseLinkedService_password": {
+			"value": ""
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"value": ""
+		},
+		"BLOB_STORAGE_AUS_connectionString": {
+			"value": ""
+		},
+		"LS_AZUREBLOB_ONLINE_connectionString": {
+			"value": ""
+		},
+		"LS_AZURE_BLOB_connectionString": {
+			"value": ""
+		},
+		"SelfHostedSQLServerTickets_password": {
+			"value": ""
+		},
+		"AzureSQLDATAMART_properties_typeProperties_server": {
+			"value": "azure-mentoring-pc.database.windows.net"
+		},
+		"AzureSQLDATAMART_properties_typeProperties_database": {
+			"value": "DataMart"
+		},
+		"AzureSQLDATAMART_properties_typeProperties_userName": {
+			"value": "adminpc"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_server": {
+			"value": "azure-mentoring-pc.database.windows.net"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_database": {
+			"value": "movies"
+		},
+		"AzureSqlDatabaseLinkedService_properties_typeProperties_userName": {
+			"value": "adminpc"
+		},
+		"LS_ABLB_MOVIES_sasUri": {
+			"value": ""
+		},
+		"LS_ADLS_LAKE_properties_typeProperties_url": {
+			"value": "https://azurementoringdatalakepc.dfs.core.windows.net/"
+		},
+		"LS_AZUREKEYVAULT_properties_typeProperties_baseUrl": {
+			"value": "https://mentoring-key-vault-pc.vault.azure.net/"
+		},
+		"SelfHostedSQLServerTickets_properties_typeProperties_server": {
+			"value": "EPESMALW03E6"
+		},
+		"SelfHostedSQLServerTickets_properties_typeProperties_database": {
+			"value": "CinemaTickets"
+		},
+		"SelfHostedSQLServerTickets_properties_typeProperties_userName": {
+			"value": "sa"
+		}
+	}
+}

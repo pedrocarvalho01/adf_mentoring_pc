@@ -1,0 +1,991 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "mentoring-adf-pc"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AZURE_SQL_SINK_STG_MOVIES_METADATA')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "adult",
+						"type": "nvarchar"
+					},
+					{
+						"name": "belongs_to_collection",
+						"type": "nvarchar"
+					},
+					{
+						"name": "budget",
+						"type": "nvarchar"
+					},
+					{
+						"name": "genres",
+						"type": "nvarchar"
+					},
+					{
+						"name": "homepage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "imdb_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "original_language",
+						"type": "nvarchar"
+					},
+					{
+						"name": "original_title",
+						"type": "nvarchar"
+					},
+					{
+						"name": "overview",
+						"type": "nvarchar"
+					},
+					{
+						"name": "popularity",
+						"type": "nvarchar"
+					},
+					{
+						"name": "poster_path",
+						"type": "nvarchar"
+					},
+					{
+						"name": "production_companies",
+						"type": "nvarchar"
+					},
+					{
+						"name": "production_countries",
+						"type": "nvarchar"
+					},
+					{
+						"name": "release_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "revenue",
+						"type": "nvarchar"
+					},
+					{
+						"name": "runtime",
+						"type": "nvarchar"
+					},
+					{
+						"name": "spoken_languages",
+						"type": "nvarchar"
+					},
+					{
+						"name": "status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tagline",
+						"type": "nvarchar"
+					},
+					{
+						"name": "title",
+						"type": "nvarchar"
+					},
+					{
+						"name": "video",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vote_average",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vote_count",
+						"type": "nvarchar"
+					},
+					{
+						"name": "pipelineId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "source_filename",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "stg",
+					"table": "movies_metadata"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AZURE_SQL_SINK_STG_RATINGS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "userId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "movieId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "rating",
+						"type": "nvarchar"
+					},
+					{
+						"name": "timestamp",
+						"type": "nvarchar"
+					},
+					{
+						"name": "pipelineId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "source_filename",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "stg",
+					"table": "ratings"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AZURE_SQL_STG_ONLINE_PURCHASE')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "online_service_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "online_service_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "movie_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "user_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "price",
+						"type": "nvarchar"
+					},
+					{
+						"name": "transaction_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "transaction_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "source_filename",
+						"type": "nvarchar"
+					},
+					{
+						"name": "pipelineId",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "stg",
+					"table": "online_purchase"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AZ_SQL_ETL_CONTROLMETA')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ControlId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SourcePath",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FileName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ColumnDelimiter",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Encoding",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EscapeCharacter",
+						"type": "nvarchar"
+					},
+					{
+						"name": "QuoteCharacter",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DestinationSchema",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DestinationTable",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DIU",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ColumnMapping",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "etl",
+					"table": "tControlMetadata"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AZ_SQL_MOVIES_STG')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"paramSchema": {
+						"type": "string"
+					},
+					"paramTable": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().paramSchema",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().paramTable",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CSV_BLOB_STORAGE_AUS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BLOB_STORAGE_AUS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "ratings.csv",
+						"container": "ratings"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "userId",
+						"type": "String"
+					},
+					{
+						"name": "movieId",
+						"type": "String"
+					},
+					{
+						"name": "rating",
+						"type": "String"
+					},
+					{
+						"name": "timestamp",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_ABLB_MOVIES_SOURCE')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ABLB_MOVIES",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "movies"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_LAKE_DESTINATION')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"outputfile": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().outputfile",
+							"type": "Expression"
+						},
+						"folderPath": "movies",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_LAKE_DESTINATION_RATINGS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "ratings"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "cast",
+						"type": "String"
+					},
+					{
+						"name": "crew",
+						"type": "String"
+					},
+					{
+						"name": "id",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_LAKE_MOVIES_RAW_ARCHIVE')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"outputfile": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().outputfile",
+							"type": "Expression"
+						},
+						"folderPath": "movies/archive",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_AZURESQL_STG_TICKETS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "cinema_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "cinema_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "movie_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ticket_count",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ticket_price",
+						"type": "decimal",
+						"precision": 4,
+						"scale": 1
+					},
+					{
+						"name": "transaction_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "transaction_date",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "stg",
+					"table": "cinema_tickets"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_AZURESQL_WATERMARK')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "PipelineName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LastModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "WatermarkTable"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_BLOB_ONLINE_JSON')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AZUREBLOB_ONLINE",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "online"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"serviceName": {
+							"type": "string"
+						},
+						"serviceCode": {
+							"type": "string"
+						},
+						"movieId": {
+							"type": "integer"
+						},
+						"userId": {
+							"type": "integer"
+						},
+						"price": {
+							"type": "string"
+						},
+						"transaction": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"datetime": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_CREDITS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "credits_*.csv",
+						"folderPath": "movies",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
+					"escapeChar": "\"",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "cast",
+						"type": "String"
+					},
+					{
+						"name": "crew",
+						"type": "String"
+					},
+					{
+						"name": "id",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_MOVIES_METADATA')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "movies_metadata_*.csv",
+						"folderPath": "movies",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
+					"escapeChar": "\"",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "adult",
+						"type": "String"
+					},
+					{
+						"name": "belongs_to_collection",
+						"type": "String"
+					},
+					{
+						"name": "budget",
+						"type": "String"
+					},
+					{
+						"name": "genres",
+						"type": "String"
+					},
+					{
+						"name": "homepage",
+						"type": "String"
+					},
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "imdb_id",
+						"type": "String"
+					},
+					{
+						"name": "original_language",
+						"type": "String"
+					},
+					{
+						"name": "original_title",
+						"type": "String"
+					},
+					{
+						"name": "overview",
+						"type": "String"
+					},
+					{
+						"name": "popularity",
+						"type": "String"
+					},
+					{
+						"name": "poster_path",
+						"type": "String"
+					},
+					{
+						"name": "production_companies",
+						"type": "String"
+					},
+					{
+						"name": "production_countries",
+						"type": "String"
+					},
+					{
+						"name": "release_date",
+						"type": "String"
+					},
+					{
+						"name": "revenue",
+						"type": "String"
+					},
+					{
+						"name": "runtime",
+						"type": "String"
+					},
+					{
+						"name": "spoken_languages",
+						"type": "String"
+					},
+					{
+						"name": "status",
+						"type": "String"
+					},
+					{
+						"name": "tagline",
+						"type": "String"
+					},
+					{
+						"name": "title",
+						"type": "String"
+					},
+					{
+						"name": "video",
+						"type": "String"
+					},
+					{
+						"name": "vote_average",
+						"type": "String"
+					},
+					{
+						"name": "vote_count",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_RATINGS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "ratings_part*.csv",
+						"folderPath": "movies",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "userId",
+						"type": "String"
+					},
+					{
+						"name": "movieId",
+						"type": "String"
+					},
+					{
+						"name": "rating",
+						"type": "String"
+					},
+					{
+						"name": "timestamp",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_LAKE_ONLINE_JSON')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "online",
+						"fileSystem": "raw"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_LAKE_ONLINE_JSON_DYNA')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().filename",
+							"type": "Expression"
+						},
+						"folderPath": "online",
+						"fileSystem": "raw"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_LAKE_RAW_METADATA_DRIVEN')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "metadata-driven",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "cast",
+						"type": "String"
+					},
+					{
+						"name": "crew",
+						"type": "String"
+					},
+					{
+						"name": "id",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_LAKE_RAW_MOVIES')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_LAKE",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "movies",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "cast",
+						"type": "String"
+					},
+					{
+						"name": "crew",
+						"type": "String"
+					},
+					{
+						"name": "id",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		}
+	]
+}
