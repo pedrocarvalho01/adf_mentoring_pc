@@ -144,7 +144,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"storedProcedureName": "[adfluis].[RemoveDuplicatedCidades]"
+					"storedProcedureName": "[adfluis].[usp_remove_cidades_duplicadas]"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureSqlDatabase_adftutorial",
